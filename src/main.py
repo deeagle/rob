@@ -2,6 +2,8 @@
 import configparser as configparser
 import os
 import glob
+import sys
+import getopt
 import time
 from pathlib import Path
 
@@ -76,14 +78,14 @@ def get_count_of_possible_files(path):
     return found_files
 
 
-def handle_backup_files(path):
+def handle_backup_files(path, deletion_mode_active):
     print("[INFO] Starting backup handling")
 
     possible_files_count = get_count_of_possible_files(path)
     if possible_files_count > int(CONF_COMMON_KEEP_FILES):
         files_to_hold = get_newest_files(path, int(CONF_COMMON_KEEP_FILES))
         files_to_remove = get_filenames_to_delete(path, files_to_hold)
-        delete_files(files_to_remove)
+        delete_files(files_to_remove, deletion_mode_active)
     else:
         print("[INFO] Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
                                                                                 int(CONF_COMMON_KEEP_FILES)))
@@ -126,7 +128,7 @@ def get_filenames_to_delete(path, list_of_newest_files):
     return files_to_remove
 
 
-def delete_files(filenames_to_delete):
+def delete_files(filenames_to_delete, deletion_mode_active):
     if not filenames_to_delete:
         print("[ERR!] Files to delete are empty.")
         return
@@ -134,17 +136,51 @@ def delete_files(filenames_to_delete):
     files_removed = 0
     for file in filenames_to_delete:
         if os.path.exists(file):
-            os.remove(file)
+            if deletion_mode_active:
+                os.remove(file)
+                print("[INFO] file <{}> removed.".format(file))
+            else:
+                print("[INFO] file <{}> will be removed in deletion mode.".format(file))
             files_removed = files_removed + 1
-            print("[INFO] file <{}> removed.".format(file))
 
-    print("[ OK ] <{}> files successfully removed.".format(files_removed))
+    if deletion_mode_active:
+        print("[ OK ] <{}> files successfully removed.".format(files_removed))
+    else:
+        print("[ OK ] <{}> files will be removed in deletion mode.".format(files_removed))
+
+
+def print_usage():
+    print("hello usage")
+
+
+def print_help():
+    print("hello help")
+
+
+def main(is_deletion_mode_active):
+    print_hi('PyCharm')
+    load_config()
+    handle_backup_files(CONF_COMMON_KEEP_PATH, is_deletion_mode_active)
+
+    print_hi('successfully finished')
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-    load_config()
-    handle_backup_files(CONF_COMMON_KEEP_PATH)
+    arguments = sys.argv[1:]
+    deletion_mode_active = False
 
-    print_hi('successfully finished')
+    try:
+        opts, args = getopt.getopt(arguments, "h")
+    except getopt.GetoptError:
+        print_usage()
+        sys.exit(2)
+
+    if not opts:
+        print("[INFO] Running in dry mode.")
+
+    for opt, arg in opts:
+        if opt == '-h':
+            print_help()
+
+    main(deletion_mode_active)
