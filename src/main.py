@@ -185,7 +185,10 @@ def print_and_log_error(msg):
 
 
 def main(is_deletion_mode_active):
-    logging.basicConfig(filename='rob.log', filemode='a', level=logging.DEBUG)
+    logging.basicConfig(filename='rob.log',
+                        filemode='a',
+                        level=logging.DEBUG,
+                        format='%(asctime)s - %(name)s - %(levelname).4s - %(message)s')
 
     print_and_log_ok("rob starts")
     if is_deletion_mode_active:
