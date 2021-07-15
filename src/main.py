@@ -81,29 +81,64 @@ def handle_backup_files(path):
 
     possible_files_count = get_count_of_possible_files(path)
     if possible_files_count > int(CONF_COMMON_KEEP_FILES):
-        get_files_to_delete(path)
+        files_to_hold = get_newest_files(path, int(CONF_COMMON_KEEP_FILES))
+        files_to_remove = get_filenames_to_delete(path, files_to_hold)
+        delete_files(files_to_remove)
     else:
         print("[INFO] Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
                                                                                 int(CONF_COMMON_KEEP_FILES)))
     print("[ OK ] Backup handling successfully finished")
 
 
-def get_files_to_delete(path):
-    file_list = []
+def get_newest_files(path, newest_files_count):
+    newest_files = []
     if not os.path.exists(path):
         print("[ERR!] Path <{}> does not exists.".format(path))
-        return file_list
+        return newest_files
 
-    # l_files = os.listdir(path)
-    # for file in l_files:
-        # if file.startswith(CONF_BACKUP_FILE_PREFIX):
-        #     file_path = Path("{}/{}".format(path, file)).absolute()
-        #     # print(os.path.getctime(filePath))
     list_of_files = glob.glob("{}/{}*".format(path, CONF_BACKUP_FILE_PREFIX))
-    for index in range(0, int(CONF_COMMON_KEEP_FILES)):
+    for index in range(0, newest_files_count):
         latest_file = max(list_of_files, key=os.path.getctime)
         list_of_files.remove(latest_file)
-        print(latest_file)
+        newest_files.append(latest_file)
+        print("[DEBG] file to hold: {}".format(latest_file))
+
+    return newest_files
+
+
+def get_filenames_to_delete(path, list_of_newest_files):
+    files_to_remove = []
+
+    if not os.path.exists(path):
+        print("[ERR!] Path <{}> does not exists.".format(path))
+        return files_to_remove
+
+    if not list_of_newest_files:
+        print("[ERR!] Newest files are empty.")
+        return files_to_remove
+
+    list_of_files = glob.glob("{}/{}*".format(path, CONF_BACKUP_FILE_PREFIX))
+    for file in list_of_files:
+        if file not in list_of_newest_files:
+            files_to_remove.append(file)
+            print("[DEBG] File to delete: {}".format(file))
+
+    return files_to_remove
+
+
+def delete_files(filenames_to_delete):
+    if not filenames_to_delete:
+        print("[ERR!] Files to delete are empty.")
+        return
+
+    files_removed = 0
+    for file in filenames_to_delete:
+        if os.path.exists(file):
+            os.remove(file)
+            files_removed = files_removed + 1
+            print("[INFO] file <{}> removed.".format(file))
+
+    print("[ OK ] <{}> files successfully removed.".format(files_removed))
 
 
 # Press the green button in the gutter to run the script.
