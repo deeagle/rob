@@ -80,7 +80,9 @@ def handle_backup_files(path):
     possible_files_count = get_count_of_possible_files(path)
     if possible_files_count > int(CONF_COMMON_KEEP_FILES):
         print_directory(path)
-
+    else:
+        print("[INFO] Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
+                                                                                int(CONF_COMMON_KEEP_FILES)))
     print("[ OK ] Backup handling successfully finished")
 
 
