@@ -1,7 +1,9 @@
 # This is a sample Python script.
 import configparser as configparser
 import os
+import glob
 import time
+from pathlib import Path
 
 CONFIG_FILE_NAME = 'config.ini'
 CONF_COMMON_KEY = 'Common'
@@ -79,11 +81,29 @@ def handle_backup_files(path):
 
     possible_files_count = get_count_of_possible_files(path)
     if possible_files_count > int(CONF_COMMON_KEEP_FILES):
-        print_directory(path)
+        get_files_to_delete(path)
     else:
         print("[INFO] Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
                                                                                 int(CONF_COMMON_KEEP_FILES)))
     print("[ OK ] Backup handling successfully finished")
+
+
+def get_files_to_delete(path):
+    file_list = []
+    if not os.path.exists(path):
+        print("[ERR!] Path <{}> does not exists.".format(path))
+        return file_list
+
+    # l_files = os.listdir(path)
+    # for file in l_files:
+        # if file.startswith(CONF_BACKUP_FILE_PREFIX):
+        #     file_path = Path("{}/{}".format(path, file)).absolute()
+        #     # print(os.path.getctime(filePath))
+    list_of_files = glob.glob("{}/{}*".format(path, CONF_BACKUP_FILE_PREFIX))
+    for index in range(0, int(CONF_COMMON_KEEP_FILES)):
+        latest_file = max(list_of_files, key=os.path.getctime)
+        list_of_files.remove(latest_file)
+        print(latest_file)
 
 
 # Press the green button in the gutter to run the script.
