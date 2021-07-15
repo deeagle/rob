@@ -32,18 +32,18 @@ def load_config():
     print_and_log_info("Config file found. Loading values.")
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE_NAME)
-    confi_params_loaded = 0
+    config_params_loaded = 0
     if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY]:
         CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_FILES_KEY]
-        confi_params_loaded = confi_params_loaded + 1
+        config_params_loaded = config_params_loaded + 1
     if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY]:
         CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_PATH_KEY]
-        confi_params_loaded = confi_params_loaded + 1
+        config_params_loaded = config_params_loaded + 1
     if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY]:
         CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][CONF_BACKUP_FILE_PREFIX_KEY]
-        confi_params_loaded = confi_params_loaded + 1
+        config_params_loaded = config_params_loaded + 1
 
-    print_and_log_ok("<{}> config params loaded from <{}>.".format(confi_params_loaded, CONFIG_FILE_NAME))
+    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
 
 
 def print_directory(path):
