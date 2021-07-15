@@ -1,0 +1,15 @@
+---
+
+version: "3.8"
+services:
+    cli:
+        image: python:rc-buster
+        container_name: "rob"
+        environment:
+            TZ: Europe/Berlin
+        volumes:
+            - ./src:/app/
+        tty: true
+        networks:
+            - default
+        restart: 'no'
