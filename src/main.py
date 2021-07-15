@@ -150,15 +150,26 @@ def delete_files(filenames_to_delete, deletion_mode_active):
 
 
 def print_usage():
-    print("hello usage")
+    print("run rob with -h for further details.")
 
 
 def print_help():
-    print("hello help")
+    print("help")
+    print("rob = remove old backups")
+    print("-------------------------------------")
+    print("-h:    prints this help")
+    print("-d:    activates the deletion mode")
+
+    exit(3)
 
 
 def main(is_deletion_mode_active):
-    print_hi('PyCharm')
+    print("rob starts")
+    if is_deletion_mode_active:
+        print("[INFO] deletion mode is active.")
+    else:
+        print("[INFO] dry mode is active.")
+
     load_config()
     handle_backup_files(CONF_COMMON_KEEP_PATH, is_deletion_mode_active)
 
@@ -171,16 +182,16 @@ if __name__ == '__main__':
     deletion_mode_active = False
 
     try:
-        opts, args = getopt.getopt(arguments, "h")
+        opts, args = getopt.getopt(arguments, "hd")
     except getopt.GetoptError:
         print_usage()
         sys.exit(2)
 
-    if not opts:
-        print("[INFO] Running in dry mode.")
-
     for opt, arg in opts:
+        print(opt)
         if opt == '-h':
             print_help()
+        elif opt == '-d':
+            deletion_mode_active = True
 
     main(deletion_mode_active)
