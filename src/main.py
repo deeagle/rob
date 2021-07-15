@@ -20,7 +20,7 @@ def print_hi(name):
 
 def load_config():
     global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
-    
+
     if not os.path.exists(CONFIG_FILE_NAME):
         print("[ERR!] Config file <{}> does not exists.".format(CONFIG_FILE_NAME))
         return
@@ -52,8 +52,30 @@ def print_directory(path):
             print("Prefix  no: {}".format(file))
 
 
+def get_count_of_possible_files(path):
+    if not os.path.exists(path):
+        print("[ERR!] Path <{}> does not exists.".format(path))
+        return
+
+    print("[INFO] Path <{}> exists.".format(path))
+    print("[INFO] Search for files with prefix <{}>".format(CONF_BACKUP_FILE_PREFIX))
+    found_files = 0
+    l_files = os.listdir(path)
+    for file in l_files:
+        if file.startswith(CONF_BACKUP_FILE_PREFIX):
+            found_files = found_files + 1
+
+    print("[ OK ] Found <{}> possible files with prefix <{}>".format(found_files, CONF_BACKUP_FILE_PREFIX))
+    return found_files
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
     load_config()
     print_directory(CONF_COMMON_KEEP_PATH)
+    possible_files_count = get_count_of_possible_files(CONF_COMMON_KEEP_PATH)
+    if possible_files_count > int(CONF_COMMON_KEEP_FILES):
+        print_directory(CONF_COMMON_KEEP_PATH)
+
+    print_hi('successfully finished')
