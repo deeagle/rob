@@ -9,6 +9,7 @@ services:
             TZ: Europe/Berlin
         volumes:
             - ./src:/app/
+            - ./resources/test-files:/tmp/rob-test-files
         tty: true
         networks:
             - default

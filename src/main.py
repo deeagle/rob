@@ -9,6 +9,7 @@ CONF_COMMON_KEEP_FILES_KEY = 'keep_files'
 CONF_COMMON_KEEP_FILES = 10
 CONF_COMMON_KEEP_PATH_KEY = 'keep_path'
 CONF_COMMON_KEEP_PATH = '.'
+CONF_BACKUP_FILE_PREFIX_KEY = 'keep_file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
 
@@ -18,7 +19,8 @@ def print_hi(name):
 
 
 def load_config():
-    global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH
+    global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
+    
     if not os.path.exists(CONFIG_FILE_NAME):
         print("[ERR!] Config file <{}> does not exists.".format(CONFIG_FILE_NAME))
         return
@@ -31,6 +33,8 @@ def load_config():
         CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_FILES_KEY]
     if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY]:
         CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_PATH_KEY]
+    if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY]:
+        CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][CONF_BACKUP_FILE_PREFIX_KEY]
 
 
 def print_directory(path):
