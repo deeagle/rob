@@ -28,13 +28,18 @@ def load_config():
     print("[INFO] Config file found. Loading values.")
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE_NAME)
-    print(config.sections())
+    confi_params_loaded = 0
     if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY]:
         CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_FILES_KEY]
+        confi_params_loaded = confi_params_loaded + 1
     if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY]:
         CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_PATH_KEY]
+        confi_params_loaded = confi_params_loaded + 1
     if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY]:
         CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][CONF_BACKUP_FILE_PREFIX_KEY]
+        confi_params_loaded = confi_params_loaded + 1
+
+    print("[ OK ] <{}> config params loaded from <{}>.".format(confi_params_loaded, CONFIG_FILE_NAME))
 
 
 def print_directory(path):
@@ -69,13 +74,20 @@ def get_count_of_possible_files(path):
     return found_files
 
 
+def handle_backup_files(path):
+    print("[INFO] Starting backup handling")
+
+    possible_files_count = get_count_of_possible_files(path)
+    if possible_files_count > int(CONF_COMMON_KEEP_FILES):
+        print_directory(path)
+
+    print("[ OK ] Backup handling successfully finished")
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
     load_config()
-    print_directory(CONF_COMMON_KEEP_PATH)
-    possible_files_count = get_count_of_possible_files(CONF_COMMON_KEEP_PATH)
-    if possible_files_count > int(CONF_COMMON_KEEP_FILES):
-        print_directory(CONF_COMMON_KEEP_PATH)
+    handle_backup_files(CONF_COMMON_KEEP_PATH)
 
     print_hi('successfully finished')
