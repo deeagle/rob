@@ -4,8 +4,6 @@ import os
 import glob
 import sys
 import getopt
-import time
-from pathlib import Path
 
 CONFIG_FILE_NAME = 'config.ini'
 CONF_COMMON_KEY = 'Common'
