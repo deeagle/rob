@@ -1,6 +1,4 @@
-# This is a sample Python script.
 import configparser as configparser
-import logging
 import os
 import glob
 import sys
