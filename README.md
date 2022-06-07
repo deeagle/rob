@@ -1,5 +1,8 @@
 # rob - remove old backups
 
+[![CI](https://github.com/deeagle/rob/actions/workflows/ci.yml/badge.svg)](https://github.com/deeagle/rob/actions/workflows/ci.yml)
+[![Release version](https://github.com/deeagle/rob/actions/workflows/release.yml/badge.svg)](https://github.com/deeagle/rob/actions/workflows/release.yml)
+
 Very simple implementation of a configurable backup management (file-level).
 
 ## Config
