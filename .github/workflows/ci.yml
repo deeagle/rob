@@ -17,9 +17,8 @@ jobs:
       - name: Lint readme file
         uses: avto-dev/markdown-lint@v1
         with:
-          #rules: '/lint/rules/changelog.js'
-          #config: '/lint/config/changelog.yml'
           args: '*.md'
+          ignore: 'CHANGELOG.md'
 
       - name: Lint python files
         uses: quentinguidee/pep8-action@v1
