@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint-files:
-    name: Lint readme file
+    name: Lint + Codestyle
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
