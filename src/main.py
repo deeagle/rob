@@ -88,7 +88,7 @@ def handle_backup_files(path, deletion_mode_active):
         delete_files(files_to_remove, deletion_mode_active)
     else:
         print_and_log_info("Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
-                                                                                int(CONF_COMMON_KEEP_FILES)))
+                                                                                      int(CONF_COMMON_KEEP_FILES)))
     print_and_log_ok("Backup handling successfully finished")
 
 
@@ -198,7 +198,6 @@ def main(is_deletion_mode_active):
 
     load_config()
     handle_backup_files(CONF_COMMON_KEEP_PATH, is_deletion_mode_active)
-
 
     print_and_log_ok('rob successfully finished')
 
