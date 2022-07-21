@@ -5,3 +5,7 @@ Common:
     files: 10
     path: /tmp
     file_prefix: db-backup
+  - keep:
+    files: 21
+    path: /tmp
+    file_prefix: mega-backup
