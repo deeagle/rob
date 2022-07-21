@@ -1,4 +1,5 @@
 .idea
 src/config.ini
+src/config.yml
 src/rob.log
 venv
