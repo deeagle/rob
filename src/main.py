@@ -8,11 +8,11 @@ import yaml
 
 CONFIG_FILE_NAME = 'config.yml'
 CONF_COMMON_KEY = 'Common'
-CONF_COMMON_KEEP_FILES_KEY = 'keep_files'
+CONF_COMMON_KEEP_FILES_KEY = 'files'
 CONF_COMMON_KEEP_FILES = 10
-CONF_COMMON_KEEP_PATH_KEY = 'keep_path'
+CONF_COMMON_KEEP_PATH_KEY = 'path'
 CONF_COMMON_KEEP_PATH = '.'
-CONF_BACKUP_FILE_PREFIX_KEY = 'keep_file_prefix'
+CONF_BACKUP_FILE_PREFIX_KEY = 'file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
 
@@ -33,21 +33,28 @@ def load_config():
         config = yaml.safe_load(config_file)
 
     config_params_loaded = 0
-    if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY]:
-        CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_FILES_KEY]
-        config_params_loaded = config_params_loaded + 1
-    if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY]:
-        CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_PATH_KEY]
-        config_params_loaded = config_params_loaded + 1
-    if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY]:
-        CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][CONF_BACKUP_FILE_PREFIX_KEY]
-        config_params_loaded = config_params_loaded + 1
 
-    if config_params_loaded == 0:
-        print_and_log_error("<{}> config params loaded from <{}>. Exit!".format(config_params_loaded, CONFIG_FILE_NAME))
+    if len(config[CONF_COMMON_KEY]) < 1:
+        print_and_log_error("<{}> cannot find config params in file <{}>. Exit!".format(config_params_loaded, CONFIG_FILE_NAME))
         exit(-1)
-    else:
-        print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
+
+    # read one 'keep' config per loop
+    for config_index in range(0, len(config[CONF_COMMON_KEY])):
+        if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY][config_index]:
+            CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_FILES_KEY]
+            config_params_loaded = config_params_loaded + 1
+        if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY][config_index]:
+            CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_PATH_KEY]
+            config_params_loaded = config_params_loaded + 1
+        if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY][config_index]:
+            CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][config_index][CONF_BACKUP_FILE_PREFIX_KEY]
+            config_params_loaded = config_params_loaded + 1
+
+        if config_params_loaded == 0:
+            print_and_log_error("<{}> config 'keep' params loaded from <{}>. Exit!".format(config_params_loaded, CONFIG_FILE_NAME))
+            exit(-1)
+
+    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
 
 
 def print_directory(path):

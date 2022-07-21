@@ -1,6 +1,7 @@
 ---
 
 Common:
-  - keep_files: 10
-  - keep_path: /tmp
-  - keep_file_prefix: db-backup
+  - keep:
+    files: 10
+    path: /tmp
+    file_prefix: db-backup
