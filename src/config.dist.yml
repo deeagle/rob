@@ -1,5 +1,7 @@
 ---
 
+# ATM only one entry (the last -keep) is supported
+
 Common:
   - keep:
     files: 10
