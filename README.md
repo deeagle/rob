@@ -10,13 +10,17 @@ Very simple implementation of a configurable backup management (file-level).
 It's very basic and supports one folder with files and prefix only.
 You can config the following keys:
 
-```ini
-# config.ini
-[Common]
-keep_files: 10
-keep_path: /tmp/
-keep_file_prefix: db-backup
+```yml
+---
+# config.yml
+Common:
+  - keep:
+    files: 10
+    path: /tmp/
+    file_prefix: db-backup
 ```
+
+Note: currently only one (the latest) entry will be handled.
 
 ## Usage
 

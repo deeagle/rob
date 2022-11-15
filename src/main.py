@@ -1,23 +1,20 @@
-import configparser as configparser
 import os
 import glob
 import sys
 import getopt
 import logging
+import yaml
 
-CONFIG_FILE_NAME = 'config.ini'
+EXIT_CONFIG_ERROR = -1
+
+CONFIG_FILE_NAME = 'config.yml'
 CONF_COMMON_KEY = 'Common'
-CONF_COMMON_KEEP_FILES_KEY = 'keep_files'
+CONF_COMMON_KEEP_FILES_KEY = 'files'
 CONF_COMMON_KEEP_FILES = 10
-CONF_COMMON_KEEP_PATH_KEY = 'keep_path'
+CONF_COMMON_KEEP_PATH_KEY = 'path'
 CONF_COMMON_KEEP_PATH = '.'
-CONF_BACKUP_FILE_PREFIX_KEY = 'keep_file_prefix'
+CONF_BACKUP_FILE_PREFIX_KEY = 'file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
 def load_config():
@@ -28,18 +25,40 @@ def load_config():
         return
 
     print_and_log_info("Config file found. Loading values.")
-    config = configparser.ConfigParser()
-    config.read(CONFIG_FILE_NAME)
+    with open(CONFIG_FILE_NAME, 'r') as config_file:
+        config = yaml.safe_load(config_file)
+
     config_params_loaded = 0
-    if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY]:
-        CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_FILES_KEY]
-        config_params_loaded = config_params_loaded + 1
-    if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY]:
-        CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][CONF_COMMON_KEEP_PATH_KEY]
-        config_params_loaded = config_params_loaded + 1
-    if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY]:
-        CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][CONF_BACKUP_FILE_PREFIX_KEY]
-        config_params_loaded = config_params_loaded + 1
+
+    if len(config[CONF_COMMON_KEY]) < 1:
+        print_and_log_error(
+            "<{}> cannot find config params in file <{}>. Exit!".format(
+                config_params_loaded,
+                CONFIG_FILE_NAME
+            )
+        )
+        exit(EXIT_CONFIG_ERROR)
+
+    # read one 'keep' config per loop
+    for config_index in range(0, len(config[CONF_COMMON_KEY])):
+        if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY][config_index]:
+            CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_FILES_KEY]
+            config_params_loaded = config_params_loaded + 1
+        if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY][config_index]:
+            CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_PATH_KEY]
+            config_params_loaded = config_params_loaded + 1
+        if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY][config_index]:
+            CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][config_index][CONF_BACKUP_FILE_PREFIX_KEY]
+            config_params_loaded = config_params_loaded + 1
+
+        if config_params_loaded == 0:
+            print_and_log_error(
+                "<{}> config 'keep' params loaded from <{}>. Exit!".format(
+                    config_params_loaded,
+                    CONFIG_FILE_NAME
+                )
+            )
+            exit(EXIT_CONFIG_ERROR)
 
     print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
 
@@ -76,14 +95,14 @@ def get_count_of_possible_files(path):
     return found_files
 
 
-def handle_backup_files(path, deletion_mode_active):
+def handle_backup_files(path, is_deletion_mode_active):
     print_and_log_info("Starting backup handling")
 
     possible_files_count = get_count_of_possible_files(path)
     if possible_files_count > int(CONF_COMMON_KEEP_FILES):
         files_to_hold = get_newest_files(path, int(CONF_COMMON_KEEP_FILES))
         files_to_remove = get_filenames_to_delete(path, files_to_hold)
-        delete_files(files_to_remove, deletion_mode_active)
+        delete_files(files_to_remove, is_deletion_mode_active)
     else:
         print_and_log_info("Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
                                                                                       int(CONF_COMMON_KEEP_FILES)))
@@ -107,7 +126,7 @@ def get_newest_files(path, newest_files_count):
 
 
 def get_filenames_to_delete(path, list_of_newest_files):
-    files_to_remove = []
+    files_to_remove: list[str] = []
 
     if not os.path.exists(path):
         print_and_log_error("Path <{}> does not exists.".format(path))
@@ -126,7 +145,7 @@ def get_filenames_to_delete(path, list_of_newest_files):
     return files_to_remove
 
 
-def delete_files(filenames_to_delete, deletion_mode_active):
+def delete_files(filenames_to_delete, is_deletion_mode_active):
     if not filenames_to_delete:
         print_and_log_error("Files to delete are empty.")
         return
@@ -134,14 +153,14 @@ def delete_files(filenames_to_delete, deletion_mode_active):
     files_removed = 0
     for file in filenames_to_delete:
         if os.path.exists(file):
-            if deletion_mode_active:
+            if is_deletion_mode_active:
                 os.remove(file)
                 logging.debug("File <{}> removed.".format(file))
             else:
                 print_and_log_info("File <{}> will be removed in deletion mode.".format(file))
             files_removed = files_removed + 1
 
-    if deletion_mode_active:
+    if is_deletion_mode_active:
         print_and_log_ok("<{}> files successfully removed.".format(files_removed))
     else:
         print_and_log_info("<{}> files will be removed in deletion mode.".format(files_removed))
