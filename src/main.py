@@ -5,6 +5,8 @@ import getopt
 import logging
 import yaml
 
+EXIT_CONFIG_ERROR = -1
+
 CONFIG_FILE_NAME = 'config.yml'
 CONF_COMMON_KEY = 'Common'
 CONF_COMMON_KEEP_FILES_KEY = 'files'
@@ -35,7 +37,7 @@ def load_config():
                 CONFIG_FILE_NAME
             )
         )
-        exit(-1)
+        exit(EXIT_CONFIG_ERROR)
 
     # read one 'keep' config per loop
     for config_index in range(0, len(config[CONF_COMMON_KEY])):
@@ -56,7 +58,7 @@ def load_config():
                     CONFIG_FILE_NAME
                 )
             )
-            exit(-1)
+            exit(EXIT_CONFIG_ERROR)
 
     print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
 
