@@ -73,6 +73,12 @@ jobs:
         run: |
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
 
-      - name: Dry run of rob
+      - name: Run rob - dry run
         run: |
           cd src; python main.py
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+
+      - name: Run rob - with active deletion mode
+        run: |
+          cd src; python main.py -d
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
