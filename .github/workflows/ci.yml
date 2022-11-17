@@ -37,3 +37,35 @@ jobs:
         uses: quentinguidee/pep8-action@v1
         with:
           arguments: '--max-line-length=120'
+
+  deletion-test:
+    name: Deletion-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Copy config
+        run: |
+          cp resources/config-tst.yml src/config.yml
+
+      - name: Create tmp files
+        run: |
+          mkdir /tmp/rob-test-files
+          touch /tmp/rob-test-files/db-backup.00.sql
+          touch /tmp/rob-test-files/db-backup.01.sql
+          touch /tmp/rob-test-files/db-backup.02.sql
+          touch /tmp/rob-test-files/db-backup.03.sql
+          touch /tmp/rob-test-files/db-backup.04.sql
+          touch /tmp/rob-test-files/db-backup.05.sql
+          touch /tmp/rob-test-files/db-backup.06.sql
+          touch /tmp/rob-test-files/db-backup.07.sql
+          touch /tmp/rob-test-files/db-backup.08.sql
+          touch /tmp/rob-test-files/db-backup.09.sql
+          touch /tmp/rob-test-files/db-backup.10.sql
+          touch /tmp/rob-test-files/db-backup.11.sql
+          touch /tmp/rob-test-files/db-backup.12.sql
+
+      - name: Show files
+        run: |
+          ls -la /tmp/rob-test-files
