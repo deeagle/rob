@@ -82,3 +82,4 @@ jobs:
         run: |
           cd src; python main.py -d
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 11
