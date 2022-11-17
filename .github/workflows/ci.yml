@@ -52,6 +52,7 @@ jobs:
       - name: Create tmp files
         run: |
           mkdir /tmp/rob-test-files
+          touch /tmp/rob-test-files/something.txt
           touch /tmp/rob-test-files/db-backup.00.sql
           touch /tmp/rob-test-files/db-backup.01.sql
           touch /tmp/rob-test-files/db-backup.02.sql
@@ -65,7 +66,9 @@ jobs:
           touch /tmp/rob-test-files/db-backup.10.sql
           touch /tmp/rob-test-files/db-backup.11.sql
           touch /tmp/rob-test-files/db-backup.12.sql
+          touch /tmp/rob-test-files/something-else.md
+          touch /tmp/rob-test-files/some-other-db-backup.sql
 
-      - name: Show files
+      - name: All files exists
         run: |
-          ls -la /tmp/rob-test-files
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
