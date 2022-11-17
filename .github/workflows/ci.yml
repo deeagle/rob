@@ -72,3 +72,7 @@ jobs:
       - name: All files exists
         run: |
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+
+      - name: Dry run of rob
+        run: |
+          cd src; python main.py
