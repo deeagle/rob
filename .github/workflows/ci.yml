@@ -39,7 +39,7 @@ jobs:
           arguments: '--max-line-length=120'
 
   deletion-test:
-    name: rob-runs
+    name: run rob
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
