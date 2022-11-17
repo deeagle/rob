@@ -6,6 +6,8 @@ import logging
 import yaml
 
 EXIT_CONFIG_ERROR = -1
+EXIT_COMMON_ERROR = 1
+EXIT_PRINT_HELP = 3
 
 CONFIG_FILE_NAME = 'config.yml'
 CONF_COMMON_KEY = 'Common'
@@ -18,6 +20,10 @@ CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
 
 def load_config():
+    """Loads the preferences from config file.
+
+    :return: None if the config file does not exist.
+    """
     global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
 
     if not os.path.exists(CONFIG_FILE_NAME):
@@ -64,8 +70,13 @@ def load_config():
 
 
 def print_directory(path):
+    """Logs the directory with included file content (CONF_BACKUP_FILE_PREFIX).
+
+    :param path: The path of the directory
+    :return: None if an error occurs (e.g. path doesn not exist).
+    """
     if not os.path.exists(path):
-        print_and_log_error("Path <{}> does not exists.".format(path))
+        print_and_log_error("Path <{}> does not exist.".format(path))
         return
 
     print_and_log_info("Path <{}> exists.".format(path))
@@ -79,6 +90,11 @@ def print_directory(path):
 
 
 def get_count_of_possible_files(path):
+    """
+
+    :param path:
+    :return:
+    """
     if not os.path.exists(path):
         print_and_log_error("Path <{}> does not exists.".format(path))
         return
@@ -96,6 +112,12 @@ def get_count_of_possible_files(path):
 
 
 def handle_backup_files(path, is_deletion_mode_active):
+    """ Checks the backup size
+
+    :param path:
+    :param is_deletion_mode_active:
+    :return:
+    """
     print_and_log_info("Starting backup handling")
 
     possible_files_count = get_count_of_possible_files(path)
@@ -110,6 +132,12 @@ def handle_backup_files(path, is_deletion_mode_active):
 
 
 def get_newest_files(path, newest_files_count):
+    """Return the newest files in the path with the CONF_BACKUP_FILE_PREFIX.
+
+    :param path: The path to validate
+    :param newest_files_count: The count of the newest files to catch
+    :return: A list of the newest files (count dependent).
+    """
     newest_files = []
     if not os.path.exists(path):
         print_and_log_error("Path <{}> does not exists.".format(path))
@@ -126,6 +154,12 @@ def get_newest_files(path, newest_files_count):
 
 
 def get_filenames_to_delete(path, list_of_newest_files):
+    """Concatenation of path and filename
+
+    :param path: The path as prefix for the files
+    :param list_of_newest_files: The list of file to add behind the path
+    :return: a list of files to remove
+    """
     files_to_remove: list[str] = []
 
     if not os.path.exists(path):
@@ -146,6 +180,11 @@ def get_filenames_to_delete(path, list_of_newest_files):
 
 
 def delete_files(filenames_to_delete, is_deletion_mode_active):
+    """Delete the given filenames.
+
+    :param filenames_to_delete: The filenames to delete (absolute path)
+    :param is_deletion_mode_active: switches between dry and real deletion mode
+    """
     if not filenames_to_delete:
         print_and_log_error("Files to delete are empty.")
         return
@@ -167,41 +206,48 @@ def delete_files(filenames_to_delete, is_deletion_mode_active):
 
 
 def print_usage():
+    """Prints the default cli usage."""
     print("run rob with -h for further details.")
 
 
 def print_help():
+    """Prints the cli help."""
     print("help")
     print("rob = remove old backups")
     print("-------------------------------------")
     print("-h:    prints this help")
     print("-d:    activates the deletion mode")
 
-    exit(3)
+    exit(EXIT_PRINT_HELP)
 
 
 def print_and_log_info(msg):
+    """Logs an information message."""
     logging.info(msg)
     print("[INFO] {}".format(msg))
 
 
 def print_and_log_ok(msg):
+    """Logs an okay message."""
     logging.info(msg)
     print("[ OK ] {}".format(msg))
 
 
 def print_and_log_warning(msg):
+    """Logs a warning message."""
     logging.warning(msg)
     print("[WARN] {}".format(msg))
 
 
 def print_and_log_error(msg):
+    """Logs an error message."""
     logging.error(msg)
     print("[ERR!] {}".format(msg))
-    exit(1)
+    exit(EXIT_COMMON_ERROR)
 
 
 def main(is_deletion_mode_active):
+    """The main function."""
     logging.basicConfig(filename='rob.log',
                         filemode='a',
                         level=logging.DEBUG,
@@ -228,7 +274,7 @@ if __name__ == '__main__':
         opts, args = getopt.getopt(arguments, "hd")
     except getopt.GetoptError:
         print_usage()
-        sys.exit(2)
+        sys.exit(EXIT_PRINT_HELP)
 
     for opt, arg in opts:
         print(opt)
