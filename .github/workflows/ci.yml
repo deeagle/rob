@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint-files:
-    name: Lint + Codestyle
+    name: lint and style
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -39,7 +39,7 @@ jobs:
           arguments: '--max-line-length=120'
 
   deletion-test:
-    name: Deletion-test
+    name: rob-runs
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -82,4 +82,3 @@ jobs:
         run: |
           cd src; python main.py -d
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
-          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 11
