@@ -82,7 +82,7 @@ def load_config():
     )
 
 
-def print_directory(path):
+def print_directory(path: str):
     """Logs the directory with included file content (CONF_BACKUP_FILE_PREFIX).
 
     :param path: The path of the directory
@@ -102,7 +102,7 @@ def print_directory(path):
             print("Prefix  no: {}".format(file))
 
 
-def get_count_of_possible_files(path):
+def get_count_of_possible_files(path: str):
     """
 
     :param path:
@@ -124,7 +124,7 @@ def get_count_of_possible_files(path):
     return found_files
 
 
-def handle_backup_files(path, is_deletion_mode_active):
+def handle_backup_files(path: str, is_deletion_mode_active: bool):
     """ Checks the backup size
 
     :param path:
@@ -144,7 +144,7 @@ def handle_backup_files(path, is_deletion_mode_active):
     print_and_log_ok("Backup handling successfully finished")
 
 
-def get_newest_files(path, newest_files_count):
+def get_newest_files(path: str, newest_files_count: int):
     """Return the newest files in the path with the CONF_BACKUP_FILE_PREFIX.
 
     :param path: The path to validate
@@ -166,7 +166,7 @@ def get_newest_files(path, newest_files_count):
     return newest_files
 
 
-def get_filenames_to_delete(path, list_of_newest_files):
+def get_filenames_to_delete(path: str, list_of_newest_files: list):
     """Concatenation of path and filename
 
     :param path: The path as prefix for the files
@@ -192,7 +192,7 @@ def get_filenames_to_delete(path, list_of_newest_files):
     return files_to_remove
 
 
-def delete_files(filenames_to_delete, is_deletion_mode_active):
+def delete_files(filenames_to_delete: list, is_deletion_mode_active: bool):
     """Delete the given filenames.
 
     :param filenames_to_delete: The filenames to delete (absolute path)
@@ -234,32 +234,32 @@ def print_help():
     exit(EXIT_PRINT_HELP)
 
 
-def print_and_log_info(msg):
+def print_and_log_info(msg: str):
     """Logs an information message."""
     logging.info(msg)
     print("[INFO] {}".format(msg))
 
 
-def print_and_log_ok(msg):
+def print_and_log_ok(msg: str):
     """Logs an okay message."""
     logging.info(msg)
     print("[ OK ] {}".format(msg))
 
 
-def print_and_log_warning(msg):
+def print_and_log_warning(msg: str):
     """Logs a warning message."""
     logging.warning(msg)
     print("[WARN] {}".format(msg))
 
 
-def print_and_log_error(msg):
+def print_and_log_error(msg: str):
     """Logs an error message and exits."""
     logging.error(msg)
     print("[ERR!] {}".format(msg))
     exit(EXIT_COMMON_ERROR)
 
 
-def main(is_deletion_mode_active):
+def main(is_deletion_mode_active: bool):
     """The main function."""
     logging.basicConfig(filename='rob.log',
                         filemode='a',
