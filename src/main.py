@@ -26,10 +26,7 @@ CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
 
 def load_config():
-    """Loads the preferences from config file.
-
-    :return: None if the config file does not exist.
-    """
+    """Loads the preferences from config file."""
     global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
 
     if not os.path.exists(CONFIG_FILE_NAME):
@@ -103,10 +100,10 @@ def print_directory(path: str):
 
 
 def get_count_of_possible_files(path: str):
-    """
+    """Returns the count of possible backup files in path.
 
-    :param path:
-    :return:
+    :param path: The path to check for backup files.
+    :return: The count of possible files to delete.
     """
     if not os.path.exists(path):
         print_and_log_error("Path <{}> does not exist.".format(path))
@@ -129,7 +126,6 @@ def handle_backup_files(path: str, is_deletion_mode_active: bool):
 
     :param path:
     :param is_deletion_mode_active:
-    :return:
     """
     print_and_log_info("Starting backup handling")
 
@@ -235,32 +231,47 @@ def print_help():
 
 
 def print_and_log_info(msg: str):
-    """Logs an information message."""
+    """Logs an information message.
+
+    :param msg: the message to print
+    """
     logging.info(msg)
     print("[INFO] {}".format(msg))
 
 
 def print_and_log_ok(msg: str):
-    """Logs an okay message."""
+    """Logs an okay message.
+
+    :param msg: the message to print
+    """
     logging.info(msg)
     print("[ OK ] {}".format(msg))
 
 
 def print_and_log_warning(msg: str):
-    """Logs a warning message."""
+    """Logs a warning message.
+
+    :param msg: the message to print
+    """
     logging.warning(msg)
     print("[WARN] {}".format(msg))
 
 
 def print_and_log_error(msg: str):
-    """Logs an error message and exits."""
+    """Logs an error message and exits.
+
+    :param msg: the message to print
+    """
     logging.error(msg)
     print("[ERR!] {}".format(msg))
     exit(EXIT_COMMON_ERROR)
 
 
 def main(is_deletion_mode_active: bool):
-    """The main function."""
+    """The main function.
+
+    :param is_deletion_mode_active: switch to handle dry run and full deletion mode
+    """
     logging.basicConfig(filename='rob.log',
                         filemode='a',
                         level=logging.DEBUG,
@@ -278,7 +289,6 @@ def main(is_deletion_mode_active: bool):
     print_and_log_ok('rob successfully finished')
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     arguments = sys.argv[1:]
     deletion_mode_active = False
