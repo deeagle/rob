@@ -34,7 +34,7 @@ def load_config():
 
     if not os.path.exists(CONFIG_FILE_NAME):
         print_and_log_error("Config file <{}> does not exists.".format(CONFIG_FILE_NAME))
-        return
+        exit(EXIT_CONFIG_ERROR)
 
     print_and_log_info("Config file found. Loading values.")
     with open(CONFIG_FILE_NAME, 'r') as config_file:
