@@ -1,3 +1,9 @@
+# rob
+#
+# rob (remove old backups) is a very simple implementation of a configurable backup management (file-level).
+#
+# :author: Martin Kock <code@deeagle.de>
+# :project: https://github.com/deeagle/rob
 import os
 import glob
 import sys
