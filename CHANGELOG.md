@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.2](https://github.com/deeagle/rob/compare/v1.1.1...v1.1.2) (2022-11-18)
+
+
+### Performance Improvements
+
+* add types for functions ([c843e0a](https://github.com/deeagle/rob/commit/c843e0aed7d6574c6395cb5a3470cc6433f1e958))
+
 ## [1.1.1](https://github.com/deeagle/rob/compare/v1.1.0...v1.1.1) (2022-11-18)
 
 
