@@ -83,7 +83,7 @@ def print_directory(path: str):
     """Logs the directory with included file content (CONF_BACKUP_FILE_PREFIX).
 
     :param path: The path of the directory
-    :return: None if an error occurs (e.g. path doesn not exist).
+    :return: None if an error occurs (e.g. path does not exist).
     """
     if not os.path.exists(path):
         print_and_log_error("Path <{}> does not exist.".format(path))
