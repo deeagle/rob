@@ -246,7 +246,7 @@ def print_and_log_warning(msg):
 
 
 def print_and_log_error(msg):
-    """Logs an error message."""
+    """Logs an error message and exits."""
     logging.error(msg)
     print("[ERR!] {}".format(msg))
     exit(EXIT_COMMON_ERROR)
