@@ -10,6 +10,7 @@ import sys
 import getopt
 import logging
 import yaml
+from typing import List
 
 EXIT_CONFIG_ERROR = -1
 EXIT_COMMON_ERROR = 1
@@ -140,7 +141,7 @@ def handle_backup_files(path: str, is_deletion_mode_active: bool):
     print_and_log_ok("Backup handling successfully finished")
 
 
-def get_newest_files(path: str, newest_files_count: int):
+def get_newest_files(path: str, newest_files_count: int) -> List[str]:
     """Return the newest files in the path with the CONF_BACKUP_FILE_PREFIX.
 
     :param path: The path to validate
@@ -162,14 +163,14 @@ def get_newest_files(path: str, newest_files_count: int):
     return newest_files
 
 
-def get_filenames_to_delete(path: str, list_of_newest_files: list):
+def get_filenames_to_delete(path: str, list_of_newest_files: List[str]) -> List[str]:
     """Concatenation of path and filename
 
     :param path: The path as prefix for the files
     :param list_of_newest_files: The list of file to add behind the path
     :return: a list of files to remove
     """
-    files_to_remove: list[str] = []
+    files_to_remove: List[str] = []
 
     if not os.path.exists(path):
         print_and_log_error("Path <{}> does not exist.".format(path))
@@ -188,7 +189,7 @@ def get_filenames_to_delete(path: str, list_of_newest_files: list):
     return files_to_remove
 
 
-def delete_files(filenames_to_delete: list, is_deletion_mode_active: bool):
+def delete_files(filenames_to_delete: List[str], is_deletion_mode_active: bool):
     """Delete the given filenames.
 
     :param filenames_to_delete: The filenames to delete (absolute path)
