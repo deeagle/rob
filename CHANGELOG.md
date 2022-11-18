@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.3](https://github.com/deeagle/rob/compare/v1.1.2...v1.1.3) (2022-11-18)
+
+
+### Performance Improvements
+
+* define list types ([da80dad](https://github.com/deeagle/rob/commit/da80dad456de6d4efa8dd641e6ad18d2688d507b))
+
 ## [1.1.2](https://github.com/deeagle/rob/compare/v1.1.1...v1.1.2) (2022-11-18)
 
 
