@@ -1,3 +1,9 @@
+# rob
+#
+# rob (remove old backups) is a very simple implementation of a configurable backup management (file-level).
+#
+# :author: Martin Kock <code@deeagle.de>
+# :project: https://github.com/deeagle/rob
 import os
 import glob
 import sys
@@ -27,8 +33,8 @@ def load_config():
     global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
 
     if not os.path.exists(CONFIG_FILE_NAME):
-        print_and_log_error("Config file <{}> does not exists.".format(CONFIG_FILE_NAME))
-        return
+        print_and_log_error("Config file <{}> does not exist.".format(CONFIG_FILE_NAME))
+        exit(EXIT_CONFIG_ERROR)
 
     print_and_log_info("Config file found. Loading values.")
     with open(CONFIG_FILE_NAME, 'r') as config_file:
@@ -67,6 +73,13 @@ def load_config():
             exit(EXIT_CONFIG_ERROR)
 
     print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
+    print_and_log_info(
+        "config keep: [{} | {} | {}]".format(
+            CONF_COMMON_KEEP_FILES,
+            CONF_COMMON_KEEP_PATH,
+            CONF_BACKUP_FILE_PREFIX
+        )
+    )
 
 
 def print_directory(path):
@@ -96,7 +109,7 @@ def get_count_of_possible_files(path):
     :return:
     """
     if not os.path.exists(path):
-        print_and_log_error("Path <{}> does not exists.".format(path))
+        print_and_log_error("Path <{}> does not exist.".format(path))
         return
 
     print_and_log_info("Path <{}> exists.".format(path))
@@ -140,7 +153,7 @@ def get_newest_files(path, newest_files_count):
     """
     newest_files = []
     if not os.path.exists(path):
-        print_and_log_error("Path <{}> does not exists.".format(path))
+        print_and_log_error("Path <{}> does not exist.".format(path))
         return newest_files
 
     list_of_files = glob.glob("{}/{}*".format(path, CONF_BACKUP_FILE_PREFIX))
@@ -163,7 +176,7 @@ def get_filenames_to_delete(path, list_of_newest_files):
     files_to_remove: list[str] = []
 
     if not os.path.exists(path):
-        print_and_log_error("Path <{}> does not exists.".format(path))
+        print_and_log_error("Path <{}> does not exist.".format(path))
         return files_to_remove
 
     if not list_of_newest_files:
@@ -240,7 +253,7 @@ def print_and_log_warning(msg):
 
 
 def print_and_log_error(msg):
-    """Logs an error message."""
+    """Logs an error message and exits."""
     logging.error(msg)
     print("[ERR!] {}".format(msg))
     exit(EXIT_COMMON_ERROR)
