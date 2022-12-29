@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.2.0](https://github.com/deeagle/rob/compare/v1.1.3...v1.2.0) (2022-12-29)
+
+
+### Features
+
+* add new config file name ([b7dd30d](https://github.com/deeagle/rob/commit/b7dd30dbefe6fa2c6e9fe960677e5ef72bbe8258))
+
 ## [1.1.3](https://github.com/deeagle/rob/compare/v1.1.2...v1.1.3) (2022-11-18)
 
 
