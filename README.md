@@ -9,7 +9,7 @@ Very simple implementation of a configurable backup management (file-level).
 
 ## Config
 
-It's very basic and supports one folder with files and prefix only.
+It's very basic and supports folders with files and prefix only.
 I support some spots to place the configuration. You can install
 a fresh version via:
 
@@ -31,11 +31,14 @@ Common:
     files: 10
     path: /tmp/
     file_prefix: db-backup
+  - keep:
+    files: 3
+    path: /tmp/
+    file_prefix: mega-backup
 ```
 
 Notes:
 
-- currently only one (the latest) entry will be handled.
 - old `config.yml` files are deprecated but still loaded.
 
 ## Usage

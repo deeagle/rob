@@ -5,3 +5,7 @@ Common:
     files: 10
     path: /tmp/rob-test-files
     file_prefix: db-backup
+  - keep:
+    files: 3
+    path: /tmp/rob-test-files
+    file_prefix: mega-backup
