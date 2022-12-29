@@ -47,7 +47,7 @@ jobs:
           arguments: '--max-line-length=120'
 
   deletion-test-deprecated-config-name:
-    name: run rob
+    name: run rob - config name deprecated
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -92,7 +92,7 @@ jobs:
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
 
   deletion-test-home-folder:
-    name: run rob
+    name: run rob - config in home
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -137,7 +137,7 @@ jobs:
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
 
   deletion-test-app-folder:
-    name: run rob
+    name: run rob - config in app dir
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
