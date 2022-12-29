@@ -27,6 +27,22 @@ CONF_COMMON_KEEP_PATH = '.'
 CONF_BACKUP_FILE_PREFIX_KEY = 'file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
+keep_configs = []
+
+
+class KeepConfig(object):
+    """Instances represent a keep config loaded from yml file."""
+    def __init__(self, count: int, path: str, prefix: str):
+        """Constructor
+
+        :param count: The count of files to keep
+        :param path:  The path to the files to keep
+        :param prefix: The prefix of the files to keep
+        """
+        self.count = count
+        self.path = path
+        self.prefix = prefix
+
 
 def get_user_home_config_path() -> str:
     """ Returns the users-home dir with appended config file.
@@ -107,16 +123,23 @@ def load_config(config_file_path: str) -> None:
         )
         exit(EXIT_CONFIG_ERROR)
 
+    # because of non-init warning in sub commands
+    config_keep_files_count = CONF_COMMON_KEEP_FILES
+    config_keep_files_path = CONF_COMMON_KEEP_PATH
+    config_keep_files_prefix = CONF_BACKUP_FILE_PREFIX
+
     # read one 'keep' config per loop
     for config_index in range(0, len(config[CONF_COMMON_KEY])):
         if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY][config_index]:
-            CONF_COMMON_KEEP_FILES = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_FILES_KEY]
+            config_keep_files_count = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_FILES_KEY]
             config_params_loaded = config_params_loaded + 1
+
         if CONF_COMMON_KEEP_PATH_KEY in config[CONF_COMMON_KEY][config_index]:
-            CONF_COMMON_KEEP_PATH = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_PATH_KEY]
+            config_keep_files_path = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_PATH_KEY]
             config_params_loaded = config_params_loaded + 1
+
         if CONF_BACKUP_FILE_PREFIX_KEY in config[CONF_COMMON_KEY][config_index]:
-            CONF_BACKUP_FILE_PREFIX = config[CONF_COMMON_KEY][config_index][CONF_BACKUP_FILE_PREFIX_KEY]
+            config_keep_files_prefix = config[CONF_COMMON_KEY][config_index][CONF_BACKUP_FILE_PREFIX_KEY]
             config_params_loaded = config_params_loaded + 1
 
         if config_params_loaded == 0:
@@ -128,14 +151,32 @@ def load_config(config_file_path: str) -> None:
             )
             exit(EXIT_CONFIG_ERROR)
 
-    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, config_file_path))
-    print_and_log_info(
-        "config keep: [{} | {} | {}]".format(
-            CONF_COMMON_KEEP_FILES,
-            CONF_COMMON_KEEP_PATH,
-            CONF_BACKUP_FILE_PREFIX
+        keep_configs.append(
+            KeepConfig(
+                config_keep_files_count,
+                config_keep_files_path,
+                config_keep_files_prefix
+            )
         )
-    )
+
+    print_loaded_configs(config_file_path)
+
+
+def print_loaded_configs(config_file_path: str) -> None:
+    """Prints the loaded configs.
+
+    :param config_file_path: The path to the config file.
+    :return: None
+    """
+    print_and_log_ok("<{}> config params loaded from <{}>.".format(len(keep_configs), config_file_path))
+    for config_index in range(0, len(keep_configs)):
+        print_and_log_info(
+            "config keep: [{} | {} | {}]".format(
+                keep_configs[config_index].count,
+                keep_configs[config_index].path,
+                keep_configs[config_index].prefix
+            )
+        )
 
 
 def print_directory(path: str):
@@ -158,10 +199,11 @@ def print_directory(path: str):
             print("Prefix  no: {}".format(file))
 
 
-def get_count_of_possible_files(path: str):
+def get_count_of_possible_files(path: str, file_prefix: str):
     """Returns the count of possible backup files in path.
 
     :param path: The path to check for backup files.
+    :param file_prefix: The prefix of the files to keep
     :return: The count of possible files to delete.
     """
     if not os.path.exists(path):
@@ -169,40 +211,41 @@ def get_count_of_possible_files(path: str):
         return
 
     print_and_log_info("Path <{}> exists.".format(path))
-    print_and_log_info("Search for files with prefix <{}>".format(CONF_BACKUP_FILE_PREFIX))
+    print_and_log_info("Search for files with prefix <{}>".format(file_prefix))
     found_files = 0
     l_files = os.listdir(path)
     for file in l_files:
-        if file.startswith(CONF_BACKUP_FILE_PREFIX):
+        if file.startswith(file_prefix):
             found_files = found_files + 1
 
-    print_and_log_ok("Found <{}> possible files with prefix <{}>".format(found_files, CONF_BACKUP_FILE_PREFIX))
+    print_and_log_ok("Found <{}> possible files with prefix <{}>".format(found_files, file_prefix))
     return found_files
 
 
-def handle_backup_files(path: str, is_deletion_mode_active: bool):
+def handle_backup_files(keep_config_entry: KeepConfig, is_deletion_mode_active: bool):
     """ Checks the backup size
 
-    :param path:
+    :param keep_config_entry:
     :param is_deletion_mode_active:
     """
     print_and_log_info("Starting backup handling")
 
-    possible_files_count = get_count_of_possible_files(path)
-    if possible_files_count > int(CONF_COMMON_KEEP_FILES):
-        files_to_hold = get_newest_files(path, int(CONF_COMMON_KEEP_FILES))
-        files_to_remove = get_filenames_to_delete(path, files_to_hold)
+    possible_files_count = get_count_of_possible_files(keep_config_entry.path, keep_config_entry.prefix)
+    if possible_files_count > int(keep_config_entry.count):
+        files_to_hold = get_newest_files(keep_config_entry.path, keep_config_entry.prefix, int(keep_config_entry.count))
+        files_to_remove = get_filenames_to_delete(keep_config_entry.path, keep_config_entry.prefix, files_to_hold)
         delete_files(files_to_remove, is_deletion_mode_active)
     else:
         print_and_log_info("Found less backup files ({} < {}), nothing to do.".format(possible_files_count,
-                                                                                      int(CONF_COMMON_KEEP_FILES)))
+                                                                                      int(keep_config_entry.count)))
     print_and_log_ok("Backup handling successfully finished")
 
 
-def get_newest_files(path: str, newest_files_count: int) -> List[str]:
+def get_newest_files(path: str, file_prefix: str, newest_files_count: int) -> List[str]:
     """Return the newest files in the path with the CONF_BACKUP_FILE_PREFIX.
 
     :param path: The path to validate
+    :param file_prefix: The prefix of the filename to keep
     :param newest_files_count: The count of the newest files to catch
     :return: A list of the newest files (count dependent).
     """
@@ -211,7 +254,7 @@ def get_newest_files(path: str, newest_files_count: int) -> List[str]:
         print_and_log_error("Path <{}> does not exist.".format(path))
         return newest_files
 
-    list_of_files = glob.glob("{}/{}*".format(path, CONF_BACKUP_FILE_PREFIX))
+    list_of_files = glob.glob("{}/{}*".format(path, file_prefix))
     for index in range(0, newest_files_count):
         latest_file = max(list_of_files, key=os.path.getctime)
         list_of_files.remove(latest_file)
@@ -221,10 +264,11 @@ def get_newest_files(path: str, newest_files_count: int) -> List[str]:
     return newest_files
 
 
-def get_filenames_to_delete(path: str, list_of_newest_files: List[str]) -> List[str]:
+def get_filenames_to_delete(path: str, file_prefix: str, list_of_newest_files: List[str]) -> List[str]:
     """Concatenation of path and filename
 
     :param path: The path as prefix for the files
+    :param file_prefix: The prefix of the filename to keep
     :param list_of_newest_files: The list of file to add behind the path
     :return: a list of files to remove
     """
@@ -238,7 +282,7 @@ def get_filenames_to_delete(path: str, list_of_newest_files: List[str]) -> List[
         print_and_log_error("Newest files are empty.")
         return files_to_remove
 
-    list_of_files = glob.glob("{}/{}*".format(path, CONF_BACKUP_FILE_PREFIX))
+    list_of_files = glob.glob("{}/{}*".format(path, file_prefix))
     for file in list_of_files:
         if file not in list_of_newest_files:
             files_to_remove.append(file)
@@ -351,7 +395,8 @@ def main(is_deletion_mode_active: bool):
 
     load_config(get_config_file_path())
 
-    handle_backup_files(CONF_COMMON_KEEP_PATH, is_deletion_mode_active)
+    for config_index in range(0, len(keep_configs)):
+        handle_backup_files(keep_configs[config_index], is_deletion_mode_active)
 
     print_and_log_ok('rob successfully finished')
 
