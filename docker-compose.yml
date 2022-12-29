@@ -3,8 +3,7 @@
 version: "3"
 services:
     cli:
-        build: .
-#        image: python:rc-buster
+        image: docdee/robpy
         container_name: "rob"
         environment:
             TZ: Europe/Berlin
