@@ -100,7 +100,7 @@ jobs:
           cd src; python main.py -d
           test $(ls /tmp/rob-test-files/* | wc -l) -eq 16
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
-          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 2
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 3
 
   deletion-test-home-folder:
     name: run rob - config in home
@@ -156,7 +156,7 @@ jobs:
           cd src; python main.py -d
           test $(ls /tmp/rob-test-files/* | wc -l) -eq 16
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
-          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 2
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 3
 
   deletion-test-app-folder:
     name: run rob - config in app dir
@@ -212,4 +212,4 @@ jobs:
           cd src; python main.py -d
           test $(ls /tmp/rob-test-files/* | wc -l) -eq 16
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
-          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 2
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 3
