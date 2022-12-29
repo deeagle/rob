@@ -10,11 +10,22 @@ Very simple implementation of a configurable backup management (file-level).
 ## Config
 
 It's very basic and supports one folder with files and prefix only.
+I support some spots to place the configuration. You can install
+a fresh version via:
+
+- in script folder
+
+  `cp rob.dist.yml rob.yml`
+
+- in users home folder
+
+  `cp rob.dist.yml ~/.rob.yml`
+
 You can config the following keys:
 
 ```yml
 ---
-# config.yml
+# rob.yml
 Common:
   - keep:
     files: 10
@@ -22,7 +33,10 @@ Common:
     file_prefix: db-backup
 ```
 
-Note: currently only one (the latest) entry will be handled.
+Notes: 
+
+- currently only one (the latest) entry will be handled.
+- old `config.yml` files are deprecated but still loaded.
 
 ## Usage
 
