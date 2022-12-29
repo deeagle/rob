@@ -35,7 +35,7 @@ There is a `docker-compose.yml` for local testing.
 
 ## Dependencies
 
-- `pyyaml`
+- `pyyaml` ([pyyaml](https://pypi.org/project/PyYAML/))
 
 ## Links
 
