@@ -20,6 +20,14 @@ jobs:
           args: '*.md'
           ignore: 'CHANGELOG.md'
 
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Lint dockerfile
+        uses: hadolint/hadolint-action@v2.0.0
+        with:
+          dockerfile: Dockerfile
+
       - name: Install flake8
         run: |
           python -m pip install --upgrade pip
