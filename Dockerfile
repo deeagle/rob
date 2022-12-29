@@ -9,8 +9,6 @@ LABEL org.opencontainers.image.authors="Martin Kock <code@deeagle.de>" \
 
 RUN apt-get -y update \
   && apt-get -yq upgrade \
-  && apt-get install --no-install-recommends --assume-yes \
-    vim \
   && rm -Rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app/rob
