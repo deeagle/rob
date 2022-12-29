@@ -1,5 +1,18 @@
 # Semantic Versioning Changelog
 
+# [1.3.0](https://github.com/deeagle/rob/compare/v1.2.0...v1.3.0) (2022-12-29)
+
+
+### Bug Fixes
+
+* app fails correctly if config key is missing ([cfaaaee](https://github.com/deeagle/rob/commit/cfaaaee8cf60aaba3042693b0a914f67291370dc))
+* show correct handled config file name in logs ([f6d85eb](https://github.com/deeagle/rob/commit/f6d85eb4addbbc89badbdf160821e8445008744c))
+
+
+### Features
+
+* support for multiple keep entries ([8a36658](https://github.com/deeagle/rob/commit/8a36658a5c6e0c8955e2cd8731c2f0f60faf8ce1))
+
 # [1.2.0](https://github.com/deeagle/rob/compare/v1.1.3...v1.2.0) (2022-12-29)
 
 
