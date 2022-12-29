@@ -27,8 +27,12 @@ CONF_BACKUP_FILE_PREFIX_KEY = 'file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
 
-def load_config(config_file_path: str):
-    """Loads the preferences from config file."""
+def load_config(config_file_path: str) -> None:
+    """Loads the preferences from config file.
+
+    :param config_file_path: The full path of the config file.
+    :return: None
+    """
     global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
 
     if not os.path.exists(config_file_path):
