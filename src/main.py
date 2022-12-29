@@ -128,7 +128,7 @@ def load_config(config_file_path: str) -> None:
             )
             exit(EXIT_CONFIG_ERROR)
 
-    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME_DEPRECATED))
+    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, config_file_path))
     print_and_log_info(
         "config keep: [{} | {} | {}]".format(
             CONF_COMMON_KEEP_FILES,
