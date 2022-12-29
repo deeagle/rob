@@ -33,7 +33,7 @@ Common:
     file_prefix: db-backup
 ```
 
-Notes: 
+Notes:
 
 - currently only one (the latest) entry will be handled.
 - old `config.yml` files are deprecated but still loaded.
