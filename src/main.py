@@ -17,7 +17,8 @@ EXIT_CONFIG_ERROR = -1
 EXIT_COMMON_ERROR = 1
 EXIT_PRINT_HELP = 3
 
-CONFIG_FILE_NAME = 'config.yml'
+CONFIG_FILE_NAME_DEPRECATED = 'config.yml'
+CONFIG_FILE_NAME = 'rob.yml'
 CONF_COMMON_KEY = 'Common'
 CONF_COMMON_KEEP_FILES_KEY = 'files'
 CONF_COMMON_KEEP_FILES = 10
@@ -25,6 +26,58 @@ CONF_COMMON_KEEP_PATH_KEY = 'path'
 CONF_COMMON_KEEP_PATH = '.'
 CONF_BACKUP_FILE_PREFIX_KEY = 'file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
+
+
+def get_user_home_config_path() -> str:
+    """ Returns the users-home dir with appended config file.
+
+    :return: The absolute path of config file in users-home.
+    """
+    user_home_path = Path.home()
+    return str(user_home_path) + "/." + CONFIG_FILE_NAME
+
+
+def is_supported_file_name_available() -> bool:
+    """Returns the existence of an available config file.
+
+    Checks the following paths (in order):
+    - <HOME>/.rob.yml
+    - rob.yml
+    - config.yml
+
+    :return: <code>True</code> if config file found, otherwise <code>False</code>.
+    """
+    if os.path.exists(get_user_home_config_path()):
+        return True
+
+    if os.path.exists(CONFIG_FILE_NAME):
+        return True
+
+    if os.path.exists(CONFIG_FILE_NAME_DEPRECATED):
+        return True
+
+    return False
+
+
+def get_config_file_path() -> str:
+    """Returns the full config file path.
+
+    To prevent failures check if config file exist before.
+    :return: The full path of the config file.
+    """
+    if os.path.exists(get_user_home_config_path()):
+        return get_user_home_config_path()
+
+    if os.path.exists(CONFIG_FILE_NAME):
+        return CONFIG_FILE_NAME
+
+    if os.path.exists(CONFIG_FILE_NAME_DEPRECATED):
+        print_and_log_warning(
+            "Config file with name <{}> is deprecated. You should use newer version <{}> instead.".format(
+                CONFIG_FILE_NAME_DEPRECATED,
+                CONFIG_FILE_NAME
+            ))
+        return CONFIG_FILE_NAME_DEPRECATED
 
 
 def load_config(config_file_path: str) -> None:
@@ -75,7 +128,7 @@ def load_config(config_file_path: str) -> None:
             )
             exit(EXIT_CONFIG_ERROR)
 
-    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME))
+    print_and_log_ok("<{}> config params loaded from <{}>.".format(config_params_loaded, CONFIG_FILE_NAME_DEPRECATED))
     print_and_log_info(
         "config keep: [{} | {} | {}]".format(
             CONF_COMMON_KEEP_FILES,
@@ -292,7 +345,12 @@ def main(is_deletion_mode_active: bool):
     user_home_path = Path.home()
     print_and_log_info("Get user home <{}>".format(user_home_path))
 
-    load_config(CONFIG_FILE_NAME)
+    if not is_supported_file_name_available():
+        print_and_log_error("No config file found. You have to create rob.yml before run.")
+        exit(EXIT_CONFIG_ERROR)
+
+    load_config(get_config_file_path())
+
     handle_backup_files(CONF_COMMON_KEEP_PATH, is_deletion_mode_active)
 
     print_and_log_ok('rob successfully finished')

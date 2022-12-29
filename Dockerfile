@@ -14,7 +14,7 @@ RUN apt-get -y update \
 RUN mkdir -p /app/rob
 
 COPY ["src/main.py", "/app/rob/main.py"]
-COPY ["src/config.dist.yml", "/app/rob/config.dist.yml"]
+COPY ["src/rob.dist.yml", "/app/rob/rob.dist.yml"]
 COPY ["CHANGELOG.md", "/app/rob/CHANGELOG.md"]
 COPY ["README.md", "/app/rob/README.md"]
 
