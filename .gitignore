@@ -2,4 +2,5 @@
 src/config.ini
 src/config.yml
 src/rob.log
+src/requirements.txt
 venv

@@ -3,12 +3,13 @@
 version: "3"
 services:
     cli:
-        image: python:rc-buster
+        build: .
+#        image: python:rc-buster
         container_name: "rob"
         environment:
             TZ: Europe/Berlin
         volumes:
-            - ./src:/app/
+            - ./src:/app/rob
             - ./resources/test-files:/tmp/rob-test-files
         tty: true
         networks:
