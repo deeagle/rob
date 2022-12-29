@@ -46,6 +46,51 @@ jobs:
         with:
           arguments: '--max-line-length=120'
 
+  deletion-test-deprecated-config-name:
+    name: run rob
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Copy config
+        run: |
+          cp resources/rob.tst.yml src/config.yml
+
+      - name: Create tmp files
+        run: |
+          mkdir /tmp/rob-test-files
+          touch /tmp/rob-test-files/something.txt
+          touch /tmp/rob-test-files/db-backup.00.sql
+          touch /tmp/rob-test-files/db-backup.01.sql
+          touch /tmp/rob-test-files/db-backup.02.sql
+          touch /tmp/rob-test-files/db-backup.03.sql
+          touch /tmp/rob-test-files/db-backup.04.sql
+          touch /tmp/rob-test-files/db-backup.05.sql
+          touch /tmp/rob-test-files/db-backup.06.sql
+          touch /tmp/rob-test-files/db-backup.07.sql
+          touch /tmp/rob-test-files/db-backup.08.sql
+          touch /tmp/rob-test-files/db-backup.09.sql
+          touch /tmp/rob-test-files/db-backup.10.sql
+          touch /tmp/rob-test-files/db-backup.11.sql
+          touch /tmp/rob-test-files/db-backup.12.sql
+          touch /tmp/rob-test-files/something-else.md
+          touch /tmp/rob-test-files/some-other-db-backup.sql
+
+      - name: All files exists
+        run: |
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+
+      - name: Run rob - dry run
+        run: |
+          cd src; python main.py
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+
+      - name: Run rob - with active deletion mode
+        run: |
+          cd src; python main.py -d
+          test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
+
   deletion-test:
     name: run rob
     runs-on: ubuntu-latest
@@ -55,7 +100,7 @@ jobs:
 
       - name: Copy config
         run: |
-          cp resources/config-tst.yml src/config.yml
+          cp resources/rob.tst.yml src/rob.yml
 
       - name: Create tmp files
         run: |
