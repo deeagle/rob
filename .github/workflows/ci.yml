@@ -74,22 +74,33 @@ jobs:
           touch /tmp/rob-test-files/db-backup.10.sql
           touch /tmp/rob-test-files/db-backup.11.sql
           touch /tmp/rob-test-files/db-backup.12.sql
+          touch /tmp/rob-test-files/mega-backup.00.sql
+          touch /tmp/rob-test-files/mega-backup.01.sql
+          touch /tmp/rob-test-files/mega-backup.02.sql
+          touch /tmp/rob-test-files/mega-backup.03.sql
+          touch /tmp/rob-test-files/mega-backup.04.sql
           touch /tmp/rob-test-files/something-else.md
           touch /tmp/rob-test-files/some-other-db-backup.sql
 
       - name: All files exists
         run: |
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 21
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 5
 
       - name: Run rob - dry run
         run: |
           cd src; python main.py
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 21
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 5
 
       - name: Run rob - with active deletion mode
         run: |
           cd src; python main.py -d
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 16
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 2
 
   deletion-test-home-folder:
     name: run rob - config in home
@@ -119,22 +130,33 @@ jobs:
           touch /tmp/rob-test-files/db-backup.10.sql
           touch /tmp/rob-test-files/db-backup.11.sql
           touch /tmp/rob-test-files/db-backup.12.sql
+          touch /tmp/rob-test-files/mega-backup.00.sql
+          touch /tmp/rob-test-files/mega-backup.01.sql
+          touch /tmp/rob-test-files/mega-backup.02.sql
+          touch /tmp/rob-test-files/mega-backup.03.sql
+          touch /tmp/rob-test-files/mega-backup.04.sql
           touch /tmp/rob-test-files/something-else.md
           touch /tmp/rob-test-files/some-other-db-backup.sql
 
       - name: All files exists
         run: |
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 21
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 5
 
       - name: Run rob - dry run
         run: |
           cd src; python main.py
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 21
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 5
 
       - name: Run rob - with active deletion mode
         run: |
           cd src; python main.py -d
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 16
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 2
 
   deletion-test-app-folder:
     name: run rob - config in app dir
@@ -164,19 +186,30 @@ jobs:
           touch /tmp/rob-test-files/db-backup.10.sql
           touch /tmp/rob-test-files/db-backup.11.sql
           touch /tmp/rob-test-files/db-backup.12.sql
+          touch /tmp/rob-test-files/mega-backup.00.sql
+          touch /tmp/rob-test-files/mega-backup.01.sql
+          touch /tmp/rob-test-files/mega-backup.02.sql
+          touch /tmp/rob-test-files/mega-backup.03.sql
+          touch /tmp/rob-test-files/mega-backup.04.sql
           touch /tmp/rob-test-files/something-else.md
           touch /tmp/rob-test-files/some-other-db-backup.sql
 
       - name: All files exists
         run: |
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 21
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 5
 
       - name: Run rob - dry run
         run: |
           cd src; python main.py
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 21
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 13
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 5
 
       - name: Run rob - with active deletion mode
         run: |
           cd src; python main.py -d
+          test $(ls /tmp/rob-test-files/* | wc -l) -eq 16
           test $(ls /tmp/rob-test-files/db-backup* | wc -l) -eq 10
+          test $(ls /tmp/rob-test-files/mega-backup* | wc -l) -eq 2
