@@ -1,7 +1,0 @@
----
-
-Common:
-  - keep:
-    files: 10
-    path: /tmp/rob-test-files
-    file_prefix: db-backup
