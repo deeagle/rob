@@ -130,6 +130,7 @@ def load_config(config_file_path: str) -> None:
 
     # read one 'keep' config per loop
     for config_index in range(0, len(config[CONF_COMMON_KEY])):
+        config_params_loaded = 0
         if CONF_COMMON_KEEP_FILES_KEY in config[CONF_COMMON_KEY][config_index]:
             config_keep_files_count = config[CONF_COMMON_KEY][config_index][CONF_COMMON_KEEP_FILES_KEY]
             config_params_loaded = config_params_loaded + 1
@@ -142,10 +143,10 @@ def load_config(config_file_path: str) -> None:
             config_keep_files_prefix = config[CONF_COMMON_KEY][config_index][CONF_BACKUP_FILE_PREFIX_KEY]
             config_params_loaded = config_params_loaded + 1
 
-        if config_params_loaded == 0:
+        if config_params_loaded != 3:
             print_and_log_error(
-                "<{}> config 'keep' params loaded from <{}>. Exit!".format(
-                    config_params_loaded,
+                "Found config failures in 'keep' entry <{}> in file <{}> (missing key). Abort!".format(
+                    config_index + 1,
                     config_file_path
                 )
             )
