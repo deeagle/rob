@@ -11,6 +11,7 @@ import getopt
 import logging
 import yaml
 from typing import List
+from pathlib import Path
 
 EXIT_CONFIG_ERROR = -1
 EXIT_COMMON_ERROR = 1
@@ -26,16 +27,20 @@ CONF_BACKUP_FILE_PREFIX_KEY = 'file_prefix'
 CONF_BACKUP_FILE_PREFIX = 'NOTHING-SET'
 
 
-def load_config():
-    """Loads the preferences from config file."""
+def load_config(config_file_path: str) -> None:
+    """Loads the preferences from config file.
+
+    :param config_file_path: The full path of the config file.
+    :return: None
+    """
     global CONF_COMMON_KEEP_FILES, CONF_COMMON_KEEP_PATH, CONF_BACKUP_FILE_PREFIX
 
-    if not os.path.exists(CONFIG_FILE_NAME):
-        print_and_log_error("Config file <{}> does not exist.".format(CONFIG_FILE_NAME))
+    if not os.path.exists(config_file_path):
+        print_and_log_error("Config file <{}> does not exist.".format(config_file_path))
         exit(EXIT_CONFIG_ERROR)
 
     print_and_log_info("Config file found. Loading values.")
-    with open(CONFIG_FILE_NAME, 'r') as config_file:
+    with open(config_file_path, 'r') as config_file:
         config = yaml.safe_load(config_file)
 
     config_params_loaded = 0
@@ -44,7 +49,7 @@ def load_config():
         print_and_log_error(
             "<{}> cannot find config params in file <{}>. Exit!".format(
                 config_params_loaded,
-                CONFIG_FILE_NAME
+                config_file_path
             )
         )
         exit(EXIT_CONFIG_ERROR)
@@ -65,7 +70,7 @@ def load_config():
             print_and_log_error(
                 "<{}> config 'keep' params loaded from <{}>. Exit!".format(
                     config_params_loaded,
-                    CONFIG_FILE_NAME
+                    config_file_path
                 )
             )
             exit(EXIT_CONFIG_ERROR)
@@ -284,7 +289,10 @@ def main(is_deletion_mode_active: bool):
     else:
         print_and_log_info("dry mode is active.")
 
-    load_config()
+    user_home_path = Path.home()
+    print_and_log_info("Get user home <{}>".format(user_home_path))
+
+    load_config(CONFIG_FILE_NAME)
     handle_backup_files(CONF_COMMON_KEEP_PATH, is_deletion_mode_active)
 
     print_and_log_ok('rob successfully finished')
