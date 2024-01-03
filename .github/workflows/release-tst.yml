@@ -10,9 +10,13 @@ permissions:
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [ master ]
+    branches:
+      - main
+      - master
 
 jobs:
   # Only for testing of the release environment.
