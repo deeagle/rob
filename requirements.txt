@@ -1,5 +1,5 @@
 # pip list --format=freeze > requirements.txt
-pip==24.1.1
+pip==24.1.2
 PyYAML==6.0.1
 setuptools==70.1.1
 wheel==0.43.0
