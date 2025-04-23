@@ -12,7 +12,7 @@ on:
 
 jobs:
   lint-files:
-    name: lint and style
+    name: lint and style (misc)
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -32,6 +32,10 @@ jobs:
         with:
           dockerfile: Dockerfile
 
+  lint-python:
+    name: lint and style (python)
+    runs-on: ubuntu-latest
+    steps:
       - name: Install flake8
         run: |
           python -m pip install --upgrade pip
