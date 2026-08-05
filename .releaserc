@@ -2,8 +2,9 @@
   "branches": ["main"],
   "debug": "true",
   "plugins": [
-    "@semantic-release/commit-analyzer",
-    {
+    [
+      "@semantic-release/commit-analyzer",
+      {
         "preset": "angular",
         "releaseRules": [
           {
