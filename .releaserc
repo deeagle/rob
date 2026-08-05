@@ -3,6 +3,20 @@
   "debug": "true",
   "plugins": [
     "@semantic-release/commit-analyzer",
+    {
+        "preset": "angular",
+        "releaseRules": [
+          {
+            "type": "build",
+            "scope": "deps",
+            "release": "patch",
+          }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"],
+        },
+      },
+    ],
     "@semantic-release/release-notes-generator",
     [
       "@semantic-release/changelog",
